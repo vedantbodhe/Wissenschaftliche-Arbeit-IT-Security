@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +14,19 @@
         h1 {
             color: #333;
         }
+        .instructions {
+            max-width: 600px;
+            margin: 20px auto;
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .instructions p {
+            margin: 10px 0;
+            font-size: 20px;
+        }
         .buttons {
             margin-top: 20px;
         }
@@ -24,31 +37,42 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-        }
-        .obfuscating {
-            background-color: #e74c3c;
-            color: #fff;
-        }
-        .framing {
-            background-color: #f39c12;
-            color: #fff;
-        }
-        .bright-patterns {
-            background-color: #2ecc71;
+            background-color: #3498db;
             color: #fff;
         }
         button:hover {
             opacity: 0.9;
         }
     </style>
+    <script>
+        function generateWebsite() {
+            const websites = [
+                "https://minimalisticsurvey.netlify.app",
+                "https://modernsurvey.netlify.app",
+                "https://retrosurvey.netlify.app"
+            ];
+
+            if (websites.length > 0) {
+                const randomWebsite = websites[Math.floor(Math.random() * websites.length)];
+                window.location.href = randomWebsite;
+            } else {
+                alert("Keine Websites verfügbar, bitte später erneut versuchen.");
+            }
+        }
+    </script>
 </head>
 <body>
-    <h1>Welcome to my Website-Analysis Experiment</h1>
-    <p>Select a type of website to test:</p>
+    <h1>Nutzerfreundlichkeit und Design: Eine Analyse der Interaktion mit Webseiten</h1>
+
+    <section class="instructions">
+        <p><strong>Experimentziel:<br><br></strong> In diesem Experiment untersuchen wir, <span style="text-decoration: underline;"><strong>wie verschiedene Designelemente und Webseitenstrukturen Ihr Nutzerverhalten beeinflussen.</span></strong></p>
+        <p><strong>Ablauf:<br><br></strong> Sie werden mindestens <strong>3 verschiedene Webseiten</strong> besuchen. Nach jeder Webseite beantworten Sie einige kurze Fragen zu Ihrer Erfahrung. <!-- Die Reihenfolge der Webseiten wird <strong>zufällig generiert</strong>. --></p>
+        <p><strong>Hinweis:<br><br></strong> Klicken Sie unten auf die Schaltfläche <strong>"Website generieren"</strong>, um eine Webseite zu starten. Folgen Sie den Anweisungen auf der Webseite und kehren Sie zurück, um die nächste zu generieren.</p>
+        <p><strong>Denken Sie daran:<br><br></strong> <strong><span style="color: green;">Es gibt keine richtigen oder falschen Antworten.</span></strong> Bitte navigieren Sie so, wie Sie es normalerweise tun würden.</p>
+    </section>
+
     <div class="buttons">
-        <button class="obfuscating" onclick="location.href='https://minimalisticsurvey.netlify.app'">Minimal Website</button>
-        <button class="framing" onclick="location.href='https://modernsurvey.netlify.app'">Modern Website</button>
-        <button class="bright-patterns" onclick="location.href='https://retrosurvey.netlify.app'">Retro Website</button>
+        <button onclick="generateWebsite()">Website generieren</button>
     </div>
 </body>
 </html>
