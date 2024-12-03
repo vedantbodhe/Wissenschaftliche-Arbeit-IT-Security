@@ -12,17 +12,16 @@
             background-color: #f4f4f9;
         }
         h1 {
-            text-align: center; /* Centers the text */
-            margin: 0 auto; /* Removes any uneven default margins */
-            padding: 0; /* Removes any default padding */
-            font-size: 24px; /* Adjust size for mobile if necessary */
-            word-wrap: break-word; /* Ensures long words break appropriately */
+            text-align: center;
+            margin: 0 auto;
+            padding: 0;
+            font-size: 24px;
+            word-wrap: break-word;
         }
-    
-        @media (max-width: 768px) { /* Mobile-specific styles */
+        @media (max-width: 768px) {
             h1 {
-                font-size: 20px; /* Adjust font size for smaller screens */
-                line-height: 1.4; /* Improves readability on mobile */
+                font-size: 20px;
+                line-height: 1.4;
             }
         }
         .instructions {
@@ -56,20 +55,50 @@
         }
     </style>
     <script>
-        function generateWebsite() {
+        function generateSequence() {
             const websites = [
                 "https://minimalisticsurvey.netlify.app",
                 "https://modernsurvey.netlify.app",
                 "https://retrosurvey.netlify.app"
             ];
 
-            if (websites.length > 0) {
-                const randomWebsite = websites[Math.floor(Math.random() * websites.length)];
-                window.location.href = randomWebsite;
-            } else {
-                alert("Keine Websites verfügbar, bitte später erneut versuchen.");
+            // Check if a sequence already exists; otherwise, create a new randomized one
+            if (!localStorage.getItem("websiteSequence")) {
+                const shuffled = shuffleArray(websites);
+                localStorage.setItem("websiteSequence", JSON.stringify(shuffled));
+                localStorage.setItem("visitedWebsites", JSON.stringify([])); // Initialize visited list
             }
         }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function navigateToNextWebsite() {
+            const sequence = JSON.parse(localStorage.getItem("websiteSequence")) || [];
+            const visited = JSON.parse(localStorage.getItem("visitedWebsites")) || [];
+
+            // Filter out already visited websites
+            const unvisited = sequence.filter(site => !visited.includes(site));
+
+            if (unvisited.length > 0) {
+                const nextWebsite = unvisited[0]; // Always pick the first unvisited website
+                visited.push(nextWebsite); // Mark as visited
+                localStorage.setItem("visitedWebsites", JSON.stringify(visited)); // Update visited list
+                window.location.href = nextWebsite; // Navigate to the website
+            } else {
+                alert("Alle Webseiten wurden besucht! Vielen Dank für Ihre Teilnahme.");
+                localStorage.removeItem("websiteSequence"); // Clear sequence for a fresh restart
+                localStorage.removeItem("visitedWebsites"); // Clear visited list for a fresh restart
+            }
+        }
+
+        // Initialize sequence when the page loads
+        window.onload = generateSequence;
     </script>
 </head>
 <body>
@@ -77,13 +106,12 @@
 
     <section class="instructions">
         <p><strong>Experimentziel:<br><br></strong> In diesem Experiment untersuchen wir, <span style="text-decoration: underline;"><strong>wie verschiedene Designelemente und Webseitenstrukturen Ihr Nutzerverhalten beeinflussen.</span></strong></p><br>
-        <p><strong>Ablauf:<br><br></strong> Sie werden mindestens <strong>3 verschiedene Webseiten</strong> besuchen. Nach jeder Webseite beantworten Sie einige kurze Fragen zu Ihrer Erfahrung. <!-- Die Reihenfolge der Webseiten wird <strong>zufällig generiert</strong>. --></p><br>
-        <p><strong>Hinweis:<br><br></strong> Klicken Sie unten auf die Schaltfläche <strong>"Website generieren"</strong>, um eine Webseite zu starten. Folgen Sie den Anweisungen auf der Webseite und kehren Sie zurück, um die nächste zu generieren.</p><br>
-        <p><strong>Denken Sie daran:<br><br></strong> <strong><span style="color: green;">Es gibt keine richtigen oder falschen Antworten.</span></strong> Bitte navigieren Sie so, wie Sie es normalerweise tun würden.</p><br>
+        <p><strong>Ablauf:<br><br></strong> Sie werden <strong>3 verschiedene Webseiten</strong> besuchen. Die Reihenfolge der Webseiten wird <strong>zufällig generiert</strong>. Nachdem Sie eine einzelne Website besucht haben, kehren Sie zur Hauptwebsite zurück <strong>(klicken Sie auf den Zurück-Pfeil in der oberen linken Ecke Ihres Browsers)</strong>. <br>Danach klicken Sie erneut auf „Website generieren“, um die nächste neue Website zu erstellen.</p><br>
+        <p><strong>Hinweis:<br><br></strong> Klicken Sie unten auf die Schaltfläche <strong>"Website generieren"</strong>, um eine Webseite zu öffnen. Nachdem Sie alle drei Websites besucht haben, ist das Experiment beendet.</p><br>
     </section>
 
     <div class="buttons">
-        <button onclick="generateWebsite()">Website generieren</button>
+        <button onclick="navigateToNextWebsite()">Website generieren</button>
     </div>
 </body>
 </html>
